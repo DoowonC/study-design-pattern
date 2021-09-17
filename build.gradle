@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    def versions = new Properties()
+    if(file("$rootDir/version.properties").exists()) {
+        project.logger.quiet("version properties is detected.")
+        file("$rootDir/version.properties").withInputStream { versions.load(it) }
+    }
+
+    extensions.add("VERSIONS", versions)
+    project.logger.quiet("#### external version is loaded ####")
+
+    dependencies {
+        // dependency manager
+        classpath ("io.spring.gradle:dependency-management-plugin:${VERSIONS.dependencyManagementVersion}")
+
+        // spring boot
+        classpath ("org.springframework.boot:spring-boot-gradle-plugin:${VERSIONS.springBootVersion}")
+        // kotlin
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${VERSIONS.kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${VERSIONS.kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-noarg:${VERSIONS.kotlinVersion}")
+    }
+
+    ext {
+        KOTLIN_GRADLE = "$rootDir/gradle/kotlin.gradle"
+//        SSH_GRADLE = "$rootDir/gradle/ssh.gradle"
+//        DOCKER_JIB_GRADLE = "$rootDir/gradle/jib.gradle"
+        SPRINGBOOT_GRADLE = "$rootDir/gradle/springboot.gradle"
+        REACTIVE_GRADLE = "$rootDir/gradle/reactive.gradle"
+//        JOOQ_GRADLE = "$rootDir/gradle/jooq.gradle"
+//        LIQUIBASE_GRADLE = "$rootDir/gradle/liquibase.gradle"
+//        DOCUMENT_GRADLE = "$rootDir/gradle/document.gradle"
+//        KOTEST_GRADLE = "$rootDir/gradle/kotest.gradle"
+//        MICRONAUT_GRADLE = "$rootDir/gradle/micronaut.gradle"
+//        PUBLISH_GRADLE = "$rootDir/gradle/publish.gradle"
+    }
+
+    // Display current environment variable
+    // see default.gradle to set the environment up
+    def environment = System.getenv().containsKey("GRADLE_ENV") ? System.getenv("GRADLE_ENV") : 'local'
+    logger.quiet("######### current env: " + environment + " #########")
+}
+
+//apply from: 'gradle/allprojects.gradle'
+apply from: 'gradle/default.gradle'
+
+idea {
+    module {
+        def kaptMain = file("${project.buildDir}/generated/source/kapt/main")
+        sourceDirs += kaptMain
+        generatedSourceDirs += kaptMain
+
+        outputDir file("${project.buildDir}/classes/main")
+        testOutputDir file("${project.buildDir}/classes/test")
+    }
+}
+
+// minimum version of java
+if (!JavaVersion.current().java11Compatible)
+    throw new GradleException("templates requires Java 11, please upgrade to at least 11")

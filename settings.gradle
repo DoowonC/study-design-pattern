@@ -1,0 +1,20 @@
+rootProject.name = 'study-design-pattern'
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+['apps'].each {
+    def projectDir = new File(rootDir, it)
+    if(!projectDir.exists()) {
+        projectDir.mkdirs()
+    }
+
+    ['strategy'].each {
+        def subProjectDir = new File(projectDir, it)
+
+        if( !subProjectDir.exists() ) {
+            subProjectDir.mkdirs()
+        }
+
+        include ":${it}"
+        project(":${it}").projectDir = new File(subProjectDir.absolutePath)
+    }
+}

@@ -1,0 +1,10 @@
+// dependencies: org.springframework.boot:spring-boot-gradle-plugin
+apply plugin: "org.springframework.boot"
+
+// Junit 5
+test {
+    useJUnitPlatform()
+    testLogging {
+        events('passed', 'skipped', 'failed')
+    }
+}

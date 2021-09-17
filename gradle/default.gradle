@@ -1,0 +1,183 @@
+allprojects {
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    group = projectGroup
+    status = project.hasProperty('profile') ? project.getProperty('profile') : 'dev'
+}
+
+subprojects { it ->
+    apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
+
+    compileJava {
+        sourceCompatibility = VERSIONS.jdkVersion
+        targetCompatibility = VERSIONS.jdkVersion
+    }
+
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
+
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:${VERSIONS.springCloudPlatformVersion}")
+            mavenBom("org.springframework.data:spring-data-bom:${VERSIONS.springDataVersion}")
+            mavenBom("software.amazon.awssdk:bom:${VERSIONS.awsSdk2Version}")
+            mavenBom("com.amazonaws:aws-java-sdk-bom:${VERSIONS.awsSdkVersion}")
+            mavenBom("org.jetbrains.kotlin:kotlin-bom:${VERSIONS.kotlinVersion}")
+            mavenBom("io.awspring.cloud:spring-cloud-aws-dependencies:${VERSIONS.springCloudAwsVersion}")
+            mavenBom("org.springframework.boot:spring-boot-dependencies:${VERSIONS.springBootVersion}")
+            mavenBom("io.r2dbc:r2dbc-bom:${VERSIONS.r2dbcVersion}")
+
+            dependencies {
+                // jooq
+                dependency("org.jooq:jooq:${VERSIONS.jooqVersion}")
+                dependency("com.github.t9t.jooq:jooq-postgresql-json:${VERSIONS.jooqJsonVersion}")
+
+                // logging
+                dependency("io.github.microutils:kotlin-logging:$VERSIONS.kotlinLoggingVersion")
+                dependency("io.github.microutils:kotlin-logging-jvm:$VERSIONS.kotlinLoggingVersion")
+
+                // dynamodb
+                dependency("io.github.boostchicken:spring-data-dynamodb:$VERSIONS.dynamoDbVersion")
+
+                // jdbc
+                dependency("org.postgresql:postgresql:$VERSIONS.postgresConnectorVersion")
+                dependency("org.mariadb.jdbc:mariadb-java-client:$VERSIONS.mariaConnectorVersion")
+
+                // reactivefeign
+                dependency("com.playtika.reactivefeign:feign-reactor-spring-cloud-starter:$VERSIONS.feignReactorVersion")
+
+                // validation
+                dependency("org.hibernate:hibernate-validator:$VERSIONS.hibernateValidatorVersion")
+                dependency("org.hibernate:hibernate-validator-annotation-processor:$VERSIONS.hibernateValidatorVersion")
+                dependency("org.hibernate:hibernate-validator-cdi:$VERSIONS.hibernateValidatorVersion")
+                dependency("com.worldturner.medeia:medeia-validator-jackson:$VERSIONS.medeiaVersion")
+
+                // reactor
+                dependency("io.projectreactor.addons:reactor-extra:$VERSIONS.reactorAddonsVersion")
+                dependency("io.projectreactor:reactor-tools:$VERSIONS.reactorVersion")
+
+                // caffeine
+                dependency("com.github.ben-manes.caffeine:caffeine:$VERSIONS.caffeineVersion")
+
+                // kms
+                dependency("org.zalando:spring-cloud-config-aws-kms:$VERSIONS.zalandoKmsVersion")
+
+                // micrometer
+                dependency("io.micrometer:micrometer-registry-cloudwatch:$VERSIONS.micrometerVersion")
+
+                // test
+                dependency("io.projectreactor.tools:blockhound-junit-platform:$VERSIONS.blockhoundVersion")
+                dependency("io.projectreactor.tools:blockhound:$VERSIONS.blockhoundVersion")
+
+                // security
+                dependency("com.nimbusds:nimbus-jose-jwt:${VERSIONS.nimbusjoseVersion}")
+                dependency("com.nimbusds:oauth2-oidc-sdk:${VERSIONS.nimbusoidcVersion}")
+                dependency("org.passay:passay:${VERSIONS.passayVersion}")
+
+                // documentation
+                dependency("com.epages:restdocs-api-spec-webtestclient:$VERSIONS.restdocEpageVersion")
+
+                // util
+                dependency("org.modelmapper:modelmapper:${VERSIONS.modelmapperVersion}")
+                dependency("org.simpleflatmapper:sfm-jdbc:${VERSIONS.simpleFlatMapperJdbcVersion}")
+                dependency("org.simpleflatmapper:sfm-jooq:${VERSIONS.simpleFlatMapperJdbcVersion}")
+                dependency("com.google.guava:guava:${VERSIONS.guavaVersion}")
+                dependency("com.vladmihalcea:hibernate-types-52:${VERSIONS.hibernateTypesVersion}")
+                dependency("org.testcontainers:junit-jupiter:${VERSIONS.testcontainersVersion}")
+                dependency("org.testcontainers:postgresql:${VERSIONS.testcontainersVersion}")
+                dependency("org.testcontainers:mysql:${VERSIONS.testcontainersVersion}")
+                dependency("org.testcontainers:localstack:${VERSIONS.testcontainersVersion}")
+                dependency("org.testcontainers:r2dbc:${VERSIONS.testcontainersVersion}")
+                dependency("com.cronutils:cron-utils:${VERSIONS.cronUtilVersion}")
+                dependency("de.huxhorn.sulky:de.huxhorn.sulky.ulid:${VERSIONS.ulidVersion}")
+                dependency("org.mongodb:bson:${VERSIONS.bsonVersion}")
+                dependency("com.google.code.gson:gson:${VERSIONS.gsonVersion}")
+                dependency("commons-io:commons-io:$VERSIONS.commonsIoVersion")
+                dependency("org.apache.commons:commons-compress:$VERSIONS.apacheCompressVersion")
+                dependency("org.tukaani:xz:$VERSIONS.sevenZVersion")
+                dependency("au.com.console:kassava:${VERSIONS.kassavaVersion}")
+                dependency("com.github.wnameless.json:json-flattener:${VERSIONS.jsonFlattenerVersion}")
+                dependency("io.github.resilience4j:resilience4j-kotlin:${VERSIONS.resilience4JVersion}")
+                dependency("io.github.resilience4j:resilience4j-ratelimiter:${VERSIONS.resilience4JVersion}")
+                dependency("io.github.resilience4j:resilience4j-retry:${VERSIONS.resilience4JVersion}")
+                dependency("com.github.pravin-raha:lexorank4j:${VERSIONS.lexoRankVersion}")
+
+                // aws
+                dependency("com.amazonaws:aws-encryption-sdk-java:${VERSIONS.awsSdkEncryptionVersion}")
+                dependency("software.amazon.awssdk:aws-crt-client:${VERSIONS.awsCrtClientVersion}")
+
+                // template engine
+                dependency("com.github.jknack:handlebars:${VERSIONS.handlebarsVersion}")
+
+                // database proxy for logging
+                dependency("net.ttddyy:datasource-proxy:${VERSIONS.datasourceProxyVersion}")
+
+                // jolt
+                dependency("com.bazaarvoice.jolt:jolt-core:${VERSIONS.joltVersion}")
+                dependency("com.bazaarvoice.jolt:json-utils:${VERSIONS.joltVersion}")
+
+                // kotest
+                dependency("io.kotest:kotest-runner-junit5:${VERSIONS.kotestVersion}")
+                dependency("io.kotest:kotest-property-jvm:${VERSIONS.kotestVersion}")
+                dependency("io.kotest:kotest-assertions-core-jvm:${VERSIONS.kotestVersion}")
+                dependency("io.kotest.extensions:kotest-extensions-spring:${VERSIONS.kotestExtensionsVersion}")
+                dependency("io.kotest.extensions:kotest-extensions-testcontainers:${VERSIONS.kotestExtensionsVersion}")
+
+                // mockk
+                dependency("io.mockk:mockk:${VERSIONS.mockkVersion}")
+                dependency("com.ninja-squad:springmockk:${VERSIONS.springmockkVersion}")
+
+                // local stack
+                dependency("cloud.localstack:localstack-utils:${VERSIONS.localstackVersion}")
+            }
+        }
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    task getAppRegistryHost() {
+        doLast {
+            println app.docker.registryHost
+        }
+    }
+
+    task getAppVersion() {
+        doLast {
+            println app.version
+        }
+    }
+
+    task initBaseSrc {
+        doLast {
+            def buildGradleFile = new File(it.project.projectDir, "build.gradle")
+            if (!buildGradleFile.exists()) {
+                buildGradleFile.createNewFile()
+            }
+
+            def appYmlFile = new File(it.project.projectDir, "app.yml")
+            if (!appYmlFile.exists()) {
+                appYmlFile.createNewFile()
+            }
+
+            it.project.sourceSets*.allSource.srcDirTrees.flatten().dir.each { dir ->
+                dir.mkdirs()
+            }
+
+            def applicationYmlFile = new File(it.project.sourceSets.main.resources.srcDirs[0].toString(), "application.yml")
+            if (!applicationYmlFile.exists()) {
+                applicationYmlFile.createNewFile()
+            }
+        }
+    }
+}

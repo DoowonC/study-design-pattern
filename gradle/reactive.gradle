@@ -1,0 +1,12 @@
+dependencies {
+    implementation("io.projectreactor:reactor-core:$VERSIONS.reactorVersion")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:$VERSIONS.reactorExVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$VERSIONS.kotlinExVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$VERSIONS.kotlinExVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$VERSIONS.kotlinExVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:$VERSIONS.kotlinExVersion") // utilities for Reactor
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$VERSIONS.kotlinExVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$VERSIONS.kotlinExVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$VERSIONS.kotlinExVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx3:$VERSIONS.kotlinExVersion")
+}
