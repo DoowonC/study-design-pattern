@@ -1,0 +1,15 @@
+---
+env: local
+profiles: local
+version: 2021.0.0-SNAPSHOT
+
+---
+env: dev
+profiles: dev
+version: 2021.0.0-SNAPSHOT
+
+---
+env: prod
+profiles: prod
+version: 2021.0.0-SNAPSHOT
+
