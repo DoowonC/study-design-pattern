@@ -7,7 +7,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
         projectDir.mkdirs()
     }
 
-    ['strategy'].each {
+    ['strategy', 'adapter'].each {
         def subProjectDir = new File(projectDir, it)
 
         if( !subProjectDir.exists() ) {
